@@ -1,6 +1,6 @@
 'use client'
 import useCsv from '@/app/zustandStore'
-import { useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useMemo, useState } from 'react'
 import {
   CartesianGrid,
@@ -13,12 +13,6 @@ import {
   YAxis,
 } from 'recharts'
 import { MoonLoader } from 'react-spinners'
-
-interface PropsType {
-  params: {
-    value: string
-  }
-}
 
 interface MetricChartProps {
   metricKey: string
@@ -100,12 +94,13 @@ const MetricChart = ({
   )
 }
 
-const Chart = ({ params }: PropsType) => {
+const Chart = () => {
+  const params = useParams<{ id: string }>()
   const [renderedCharts, setRenderedCharts] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(true)
   const router = useRouter()
-  const indexes = JSON.parse(params.value).id.split('%2C')
-  console.log(JSON.parse(params.value).id.split('%2C'))
+  const indexes = params.id.split('%2C')
+
   const csvData = useCsv((state) => state.csvData)
 
   const selectedExperiments = useMemo(
